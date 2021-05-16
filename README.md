@@ -1,7 +1,7 @@
-# Structural subtyping in Golang versus Java
+# Structural subtyping in Golang versus Java & Generics
 
 ## Einleitung 
-Der Artikel wirft einen Blick in die Welt der Polymorphie. Es gibt verschiedene Arten von Formen der Polymorphie. Hier soll auf dieser Arten eingegangen werden. Zuerst wirft der Artikel einen Blick auf die Form der Subtyp Polymorphie. Dabei wird sich herausstellen, dass die Sprache Golang eine spezielle Ausprägung des Subtyping besitzt. Dabei handelt es sich um das  sogenannte Structural Subtyping. Dazu im Vergleich wird die Sprache Java gestellt, welche eine andere Form des Subtyping kennt. Im Anschluss soll noch auf Parametrische Polymorphie eingegangen werden und welche Vorteile diese mit sich bringt. Dabei wird ein Blick auf Generics in Java geworfen. 
+Der Artikel wirft einen Blick in die Welt der Polymorphie. Es gibt verschiedene Arten von Formen der Polymorphie. Hier soll auf zwei dieser Arten eingegangen werden. Zuerst wirft der Artikel einen Blick auf die Form der Subtyp Polymorphie. Dabei wird sich herausstellen, dass die Sprache Golang eine spezielle Ausprägung des Subtyping besitzt. Dabei handelt es sich um das sogenannte Structural Subtyping. Dazu im Vergleich wird die Sprache Java gestellt, welche eine andere Form des Subtyping kennt. Im Anschluss soll noch auf parametrische Polymorphie eingegangen werden und welche Vorteile diese mit sich bringt. Dabei wird ein Blick auf Generics in Java geworfen. 
 
 ## Subtyping
 
@@ -17,11 +17,11 @@ classDiagram
           +run()
       }
 ````
-Hier soll zunächst einmal geklärt werden, wobei es sich um Subtyping handelt. Wie bereits erwähnt handelt es sich beim Subtyping um eine Form der Polymorphie. Es wird dazu verwendet abstrakteren Code zu schreiben. Als Subtyp wird eine Untereinheit einer bestimmten Entität bezeichnet. In dem Beispiel oben sieht man es konkret. Dort sieht man das `Duck` und `Cat` Subtypen vom Typ `Animal` sind. `Duck` und `Cat` sind also beide speziellere Typen als der Typ `Animal`. Bei `Animal` spricht man auch vom sogenannten Supertypen. Man schreibt auch `Animal <= Duck`.  Im folgenden werden noch zwei verschiedene Formen des Subtyping vorgestellt. 
+Hier soll zunächst einmal geklärt werden, wobei es sich um Subtyping handelt. Wie bereits erwähnt, handelt es sich beim Subtyping um eine Form der Polymorphie. Es wird dazu verwendet, abstrakteren Code zu schreiben. Als Subtyp wird eine Untereinheit einer bestimmten Entität bezeichnet. In dem Beispiel oben sieht man es konkret. Dort sieht man das `Duck` und `Cat` Subtypen vom Typ `Animal` sind. `Duck` und `Cat` sind also beide speziellere Typen als der Typ `Animal`. Bei `Animal` spricht man auch vom sogenannten Supertypen. Man schreibt auch `Animal <= Duck`.  Im Folgenden werden noch zwei verschiedene Formen des Subtyping vorgestellt.
 
 ## Nominal subtyping
 
-Das Nominale Subtyping findet in Programmiersprachen wie Java oder C++ Anwendung. Bei dieser Art von Subtyping muss der Supertyp direkt an den Subtypen vererbt  oder implementiert werden. Nun lässt sich Beispielsweise `Duck` auch überall dort verwenden, wo ein `Animal` Objekt erwartet wird. Der Grund hierfür ist der, das `Duck` ein Subtyp von `Animal` ist. Im folgenden Beispiel sieht man das noch einmal konkret.
+Das nominale Subtyping findet in Programmiersprachen wie Java oder C++ Anwendung. Bei dieser Art von Subtyping muss der Supertyp direkt an den Subtypen vererbt oder implementiert werden. Nun lässt sich beispielsweise `Duck` auch überall dort verwenden, wo ein `Animal` Objekt erwartet wird. Der Grund hierfür ist, das `Duck` ein Subtyp von `Animal` ist. Im folgenden Beispiel sieht man das noch einmal konkret.
 
 ````java
 interface Animal {
@@ -63,11 +63,11 @@ public static void main(String[] args) {
 }
 ````
 
-Bei diesem Quellcode handelt es sich um Java. Oben wird ein Interface Animal definiert. Dieses wird weiter unten in die zwei Klassen `Cat` und `Duck` implementiert. Nun sieht man das sich eine Katze oder eine Ente auch einem Tier zuweisen lässt. Wenn man nun die Methode `talk()` aufruft, wird die Implementierung in der jeweiligen Klasse aufgerufen. Daraus folgt das die Katze `meow` und die Ente `quack` sagt.  Außerdem sieht man das sich in den Klassen `Duck` und `Cat` noch weitere Methoden definieren lassen. Diese lassen sich aber auch nur aufrufen, wenn die Person  von der jeweiligen Klasse war. So lässt sich die Methode `swim()` nur von der Ente aufrufen. Wenn man dies machen möchte, muss man die Klasse `Animal` aber vorher explizit in dem Fall zur `Duck` casten.  Wie dies geht lässt sich oben im Beispiel Programm nachvollziehen. Dabei sollte man jedoch vorsichtig sein, den ein Tier das vorher eine Katze war lässt sich nicht zu einer Ente casten. Dabei würde es zu einem Laufzeitfehler kommen. Dieser Laufzeitfehler lässt sich mit einer Fallunterscheidung vermeiden. Den mit `instanceof` lässt sich in Java feststellen, ob es sich bei der Instanz um das jeweilige Objekt handelt. Im Beispiel sieht man das vor dem Cast geprüft ob das Objekt `duck` wirklich vom Typ `Duck` war. Dies ist in diesem Fall natürlich der Fall. 
+Bei diesem Quellcode handelt es sich um Java. Oben wird ein Interface `Animal` definiert. Dieses wird weiter unten in die zwei Klassen `Cat` und `Duck` implementiert. Nun sieht man, dass sich eine Katze oder eine Ente auch einem Tier zuweisen lässt. Wenn man nun die Methode `talk()` aufruft, wird die Implementierung in der jeweiligen Klasse aufgerufen. Daraus folgt das die Katze `meow` und die Ente `quack` sagt. Außerdem sieht man das sich in den Klassen `Duck` und `Cat` noch weitere Methoden definieren lassen. Diese lassen sich aber auch nur aufrufen, wenn die Person von der jeweiligen Klasse war. So lässt sich die Methode `swim()` nur von der Ente aufrufen. Wenn man dies machen möchte, muss man die Klasse `Animal` aber vorher explizit in dem Fall zur `Duck` casten.  Wie dies geht, lässt sich oben im Beispiel Programm nachvollziehen. Dabei sollte man jedoch vorsichtig sein, den ein Tier, das vorher eine Katze war, lässt sich nicht zu einer Ente casten. Dabei würde es zu einem Laufzeitfehler kommen. Dieser Laufzeitfehler lässt sich mit einer Fallunterscheidung vermeiden. Den mit `instanceof` lässt sich in Java feststellen, ob es sich bei der Instanz um das jeweilige Objekt handelt. Im Beispiel sieht man das vor dem Cast geprüft wird, ob das Objekt `duck` wirklich vom Typ `Duck` war. Dies ist in diesem Fall natürlich der Fall.
 
 ## Structural subtyping
 
-Golang ist eine Structural-Typed Sprache. Das bedeutet das in dieser Sprache nur die Strukturen des spezielleren Typen mit dem Subtypen übereinstimmen müssen. Der große Unterschied zu  Nominal-Typed Sprachen ist der, dass das Interface nicht mehr an die Klasse vererbt oder implementiert werden muss. Wobei es in der Programmiersprache Golang keine Klassen, sondern nur Structs gibt. Diese verhalten sich aber Ähnlich. Im folgenden Beispiel kann man nachvollziehen, wie dies Praktisch in Golang aussieht.
+Golang ist eine Structural-Typed Sprache. Das bedeutet, dass in dieser Sprache nur die Strukturen des spezielleren Typen mit dem Subtypen übereinstimmen muss. Der große Unterschied zu  Nominal-Typed Sprachen ist der, dass das Interface nicht mehr an die Klasse vererbt oder implementiert werden muss. Wobei es in der Programmiersprache Golang keine Klassen, sondern nur Structs gibt. Diese verhalten sich aber ähnlich. Im folgenden Beispiel kann man nachvollziehen, wie dies praktisch in Golang aussieht.
 
 ````go
 type Animal interface {
@@ -101,7 +101,7 @@ func main() {
 }
 ````
 
-Ganz oben im Programm findet man die Definition des `Animal` Interfaces wieder. Dieses wird jedoch wie bereits erwähnt nirgends implementiert oder vererbt. Es dient lediglich als Supertyp, dem ebenfalls die Spezielleren Typen zugewiesen werden können. In dem Fall sind die Spezielleren Typen wieder `Cat` und `Duck`.  Für diese beiden Objekte müssen lediglich wieder die Methoden implementiert werden die das Interface also der Supertyp zur Verfügung stellt. In diesem Fall handelt es sich hierbei nur um die Methode `talk()`. Oben im Code sieht man, wie dies in der Sprache Golang möglich ist. Dazu muss lediglich das Objekt als Receiver-Typ vor die Methode geschrieben werden. Im Anschluss kann die Methode auf dem Objekt aufgerufen werden.  Natürlich können die Subtyp Klassen beziehungsweise Structs auch hier wieder mehr Methoden und Member Variablen halten als der eigentliche Supertyp. Im Beispiel Code sieht man etwa das die Methoden `run()` und `swim` zu den Structs hinzugefügt wurden. Ès folgt ein weiteres Beispiel in Golang.
+Ganz oben im Programm findet man die Definition des `Animal` Interfaces wieder. Dieses wird jedoch wie bereits erwähnt nirgends implementiert oder vererbt. Es dient lediglich als Supertyp, dem ebenfalls die spezielleren Typen zugewiesen werden können. In dem Fall sind die spezielleren Typen wieder `Cat` und `Duck`. Für diese beiden Objekte müssen lediglich wieder die Methoden implementiert werden, die das Interface, also der Supertyp zur Verfügung stellt. In diesem Fall handelt es sich hierbei nur um die Methode `talk()`. Oben im Code sieht man, wie dies in der Sprache Golang möglich ist. Dazu muss lediglich das Objekt als Receiver-Typ vor die Methode geschrieben werden. Im Anschluss kann die Methode auf dem Objekt aufgerufen werden. Natürlich können die Subtyp Klassen beziehungsweise Structs auch hier wieder mehr Methoden und Member Variablen halten als der eigentliche Supertyp. Im Beispiel Code sieht man etwa, das die Methoden `run()` und `swim` zu den Structs hinzugefügt wurden. Es folgt ein weiteres Beispiel in Golang.
 
 ````Golang
 type Person interface {
@@ -163,8 +163,83 @@ func main() {
 }
 ````
 
-Das Beispiel oben zeigt einen sinnvollen Anwendungsfall von Polymorphie mit Subtyping. Das Programm soll zu allen Personengruppen den Namen und das Alter ausgeben. Zusätzlich soll es das Semester ausgeben, wenn es sich bei der Person um einen Studenten handelt. Dank der Polymorphie müssen hier nicht für jede Art von Person eine Vorschleife durchlaufen werden, sondern nur eine. Dies erhöht die Lesbarkeit bei Algorithmen erheblich. In Golang gibt es kein `instanceof`. Stattdessen wird beim Cast ein Boolean zurück geliefert, welcher angibt ob der Cast möglich ist. Dies ist vielleicht sogar noch etwas intuitiver als in Java. Die Überprüfung wird in unserem Fall dafür verwendet um zu checken, ob es sich bei der Person um einen Studenten handelt. Ist dies der Fall wird das Semester mit ausgeben. 
+Das Beispiel oben zeigt einen sinnvollen Anwendungsfall von Polymorphie mit Subtyping. Das Programm soll zu allen Personengruppen den Namen und das Alter ausgeben. Zusätzlich soll es das Semester ausgeben, wenn es sich bei der Person um einen Studenten handelt. Dank der Polymorphie müssen hier nicht für jede Art von Person eine FOR-Schleife durchlaufen werden, sondern nur eine. Dies erhöht die Lesbarkeit bei Algorithmen erheblich. In Golang gibt es kein `instanceof`. Stattdessen wird beim Cast ein Boolean zurückgeliefert, welcher angibt, ob der Cast möglich ist. Dies ist vielleicht sogar noch etwas intuitiver als in Java. Die Überprüfung wird in unserem Fall dafür verwendet, um zu checken, ob es sich bei der Person um einen Studenten handelt. Ist dies der Fall, wird das Semester mit ausgeben.
 
 # Parametrischer Polymorphismus
 
-In Golang existiert bisher leider parametrischer Polymorphismus. Allerdings werden derzeit Überlegungen angestellt dieses Konzept in die Sprache zu implementieren. Jedoch existiert dies in Sprachen wie Beispielsweise Java oder C++. Diese Art von Polymorphismus ist in Java unter dem Namen Generics und unter C++ mit dem Namen Templates bekannt. In diesem Abschnitt erfahren werden die Vorteile von parametrischer Polymorphie aufgezeigt und wie dies in Java aussieht. 
+In Golang existiert bisher leider kein parametrischer Polymorphismus. Allerdings werden derzeit Überlegungen angestellt, dieses Konzept in die Sprache zu implementieren. Jedoch existiert dieser in Sprachen wie beispielsweise Java oder C++. Diese Art von Polymorphismus ist in Java unter dem Namen Generics und unter C++ mit dem Namen Templates bekannt. In diesem Abschnitt werden sie die Vorteile von parametrischer Polymorphie kennenlernen und wie diese unter Java angewandt wird. Es folgt ein Beispiel in Java, welches Generics veranschaulicht.
+
+`````Java
+public class Person implements Comparable<Person> {
+
+	private String firstName;
+	private String lastName;
+
+	public Person(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	@Override
+	public int compareTo(Person other) {
+		return this.lastName.compareTo(other.lastName);
+	}
+
+}
+
+public class Sort<T extends Comparable<T>> {
+
+	public void bubbleSort(T list[]) {
+		for (int i = 1; i < list.length; i++) {
+			for (int j = 0; j < list.length - i; j++) {
+				if (list[j].compareTo(list[j + 1]) > 0) {
+					T temp = list[j];
+					list[j] = list[j + 1];
+					list[j + 1] = temp;
+				}
+			}
+		}
+	}
+}
+
+public static void main(String[] args) {
+		Integer[] numbers = { 3, 2, 1, 4, 5, 6, 7, 9, 8 };
+		Sort<Integer> sortNumbers = new Sort<>();
+		sortNumbers.bubbleSort(numbers);
+		System.out.println(Arrays.toString(numbers));
+
+		String[] names = { "Remilia", "Reimu", "Marisa", "Sakuya", "Youmu" };
+		Sort<String> sortNames = new Sort<>();
+		sortNames.bubbleSort(names);
+		System.out.println(Arrays.toString(names));
+
+		Person[] persons = { new Person("Remilia", "Scarlet"), new Person("Reimu", "Hakurei"),
+				new Person("Youmu", "Konpaku") };
+		Sort<Person> sortPersons = new Sort<>();
+		sortPersons.bubbleSort(persons);
+		System.out.println();
+		for (int i = 0; i < persons.length; i++) {
+			System.out.println("Person " + i + ": " + persons[i].getFirstName() + " " + persons[i].getLastName());
+		}
+	}
+
+`````
+
+
+
+Das Beispiel zeigt, wie in Java mit Generics gearbeitet wird. Das Tolle an Generics ist, dass man eine Klasse oder eine Methode nicht für mehrere Typen schreiben muss. Statt den Typen direkt anzugeben, ersetzt man den Typen durch einen Platzhalter. Oben im Beispiel wird dafür der Buchstabe `T` verwendet, der den Typen darstellen soll. Das Beispiel zeigt eine Klasse `Sort`, die eine einfache Methode zum Sortieren einer beliebigen Datenstruktur zur Verfügung stellt. In dem Fall wird der Bubble-Sort verwendet. In Java ist es so, dass die Standarddatentypen in den Wrapper Klassen Integer, String oder Double die Vergleichsmethode `compareTo(T other)` direkt mit implementiert haben. Aus diesem Grund funktioniert der Vergleich der Elemente in der Sortierung ohne Weiteres. Dies ist aber nicht mehr der Fall, sobald man einen eigenen Typen definiert. Woher auch soll die Methode `CompareTo` wissen, auf welche Eigenschaften sie den Datentypen vergleichen soll? Um dies zu realisieren, muss zunächst das Interface `Comparable` implementiert werden. Im Anschluss wird gefordert, dass die Methode `CompareTo(T other)`implementiert werden muss. Dort kann man den Vergleich selbst bestimmen. Im Beispiel sieht man, dass sich dafür entschieden wurde, nach dem Nachnamen zu sortieren. Nun kann man mit der Klasse `Sort` und der Methode `bubbleSort` die Datenstruktur sortieren lassen.
+
+
+
+# Zusammenfassung
+
+Schlussendlich lässt sich feststellen, dass Polymorphie die Lesbarkeit deutlich erhöht und redundanten Code vermeidet. Dabei ist es egal, welche Programmiersprache verwendet wird. Wenn möglich, sollte Polymorphie daher verwendet werden.
+
