@@ -17,18 +17,45 @@ classDiagram
           +run()
       }
 ````
-Hier soll zunächst einmal geklärt werden, wobei es sich um Subtyping handelt. Wie bereits erwähnt, handelt es sich beim Subtyping um eine Form der Polymorphie. Es wird dazu verwendet, abstrakteren Code zu schreiben. Als Subtyp wird eine Untereinheit einer bestimmten Entität bezeichnet. In dem Beispiel oben sieht man es konkret. Dort sieht man das `Duck` und `Cat` Subtypen vom Typ `Animal` sind. `Duck` und `Cat` sind also beide speziellere Typen als der Typ `Animal`. Bei `Animal` spricht man auch vom sogenannten Supertypen. Man schreibt auch `Animal <= Duck`.  Im Folgenden werden noch zwei verschiedene Formen des Subtyping vorgestellt.
+Hier soll zunächst einmal geklärt werden, wobei es sich um Subtyping handelt. Wie bereits erwähnt, handelt es sich beim Subtyping um eine Form der Polymorphie. Es wird dazu verwendet, abstrakteren Code zu schreiben. Als Subtyp wird eine Untereinheit einer bestimmten Entität bezeichnet. In dem Beispiel oben sieht man es konkret. Dort sieht man das `Duck` und `Cat` Subtypen vom Typ `Animal` sind. `Duck` und `Cat` sind also beide speziellere Typen als der Typ `Animal`. Bei `Animal` spricht man auch vom sogenannten Supertypen. Man schreibt auch `Duck <= Animal`.  Im Folgenden werden noch zwei verschiedene Formen des Subtyping vorgestellt.
 
 ## Nominal subtyping
 
-Das nominale Subtyping findet in Programmiersprachen wie Java oder C++ Anwendung. Bei dieser Art von Subtyping muss der Supertyp direkt an den Subtypen vererbt oder implementiert werden. Nun lässt sich beispielsweise `Duck` auch überall dort verwenden, wo ein `Animal` Objekt erwartet wird. Der Grund hierfür ist, das `Duck` ein Subtyp von `Animal` ist. Im folgenden Beispiel sieht man das noch einmal konkret.
+Das nominale Subtyping findet in Programmiersprachen wie Java oder C++ Anwendung. Zwei Typen haben dort vereinfacht gesagt denselben Typen, wenn sie den gleichen Namen besitzen. Dies gilt auch wenn ein Typ T1 ein Subtyp von T2 ist, dazu muss der Subtyp jedoch den Supertyp vererbt bekommen. Nun lässt sich beispielsweise `Duck` auch überall dort verwenden, wo ein `Animal` Objekt erwartet wird. Der Grund hierfür ist, das `Duck` ein Subtyp von `Animal` ist.  Dabei ist es besonders wichtig das die Subtypenbeziehung explizit definiert wird. Dies soll nun mit einem Beispiel verdeutlicht werden. 
+
+```java
+class Shape { // Supertyp
+    int x;
+    int y;
+}
+
+class Rectangle extends Shape { // Subtype from Shape in Nominal Typed Languages, because Rectangle extends Shape
+    int height;
+    int width;
+}
+
+class Rect { // This is not a Subtype from Shape
+    int x;
+    int y;
+    int height;
+    int width;
+}
+
+public void main(String[] args) {
+    Shape rectangle1 = Rectangle(); // Possible, because Rectangle is a Sutype from Shape
+    Shape rectangle2 = Spape(); 
+    Shape rectangle3 = Rect(); // Error, this is not possible, but possible in Structual Typed Languages     
+}
+```
+
+Hier sieht man, dass `Rectangle` ein Subtyp von `Shape` ist. Da wir wie gesagt in einer Nominal Typed Language sind muss die Subtypbeziehung explizit definiert werden, dies erreicht man wie man in dem Beispiel sieht über das `extends`. `Shape` wird also an `Rectangle` vererbt. Die lässt sich auch Formal ausdrücken `Rectangle <= Shape`. In dem Beispiel sieht man aber auch das es nicht reicht, wenn nur die Struktur des Typen mit dem Supertypen übereinstimmt. Dies wird bei der Zuweisung `rectangle3` versucht, was aber nicht möglich ist. Dies ist jedoch in Struktural Typed Sprachen möglich. Auf diese wird nachher noch eingegangen. Es folgt noch ein weiteres Beispiel, um die Polymorphie mit Nominalen Subtypen besser verstehen zu können. 
 
 ````java
-interface Animal {
+class Animal {
 	public void talk();
 }
 
-public class Cat implements Animal { // Cat must implement Animal Interface
+public class Cat extends Animal { // Cat must implement Animal Interface
 	
 	@Override
 	public void talk() {
@@ -40,7 +67,7 @@ public class Cat implements Animal { // Cat must implement Animal Interface
     }
 }
 
-public class Duck implements Animal { // Duck must implement Animal Interface
+public class Duck extends Animal { // Duck must implement Animal Interface
 	
 	@Override
 	public void talk() {
