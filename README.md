@@ -52,7 +52,9 @@ Hier sieht man, dass `Rectangle` ein Subtyp von `Shape` ist. Da wir wie gesagt i
 
 ````java
 class Animal {
-	public void talk();
+	public void talk() {
+		System.out.println("Animal noice");
+	}
 }
 
 public class Cat extends Animal { // Cat must implement Animal Interface
